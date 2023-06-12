@@ -45,6 +45,7 @@ router.post("/login", async (req, res) => {
                 httpOnly: true
             })
             return res.status(200).json(accessToken)
+
 		} else {
 			return res.sendStatus(400).json({
 				message: "Wrong Password",
@@ -56,3 +57,22 @@ router.post("/login", async (req, res) => {
 		});
 	}
 });
+
+router.post('/logout', async (req, res) => {
+    try {
+        const {email} = req.body
+        const updatedUser = await User.update({
+            token: ''
+        }, {
+            where: {email:email}
+        })
+        res.clearCookie("refreshToken")
+        return res.status(200).json({
+            accessToken: ''
+        })
+    } catch (error) {
+        return res.status(400).json({
+            message: 'Error while logging out'
+        })
+    }
+})
