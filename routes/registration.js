@@ -8,7 +8,7 @@ require("dotenv").config();
 router.post("/", async (req, res) => {
 	try {
 		const { username, name, password, email } = req.body;
-		const salt = await bcrypt.genSalt(process.env.SALT);
+		const salt = await bcrypt.genSalt(Number(process.env.SALT));
 		const hashedPassword = await bcrypt.hash(password, salt);
 		const createdUser = await User.create({
 			username: username,
