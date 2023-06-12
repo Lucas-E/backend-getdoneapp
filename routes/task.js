@@ -50,4 +50,69 @@ router.get('/allTasks', checkJwt, async (req, res) => {
     }
 })
 
+router.delete('/single/:id', checkJwt, checkOwnership, async (req, res) => {
+    try {
+        const task = req.task
+        await Task.destroy({
+            where:{
+                id: task.id
+            }
+        })
+        return res.sendStatus(200)
+    } catch (error) {
+        return res.status(400).json({
+            message: "Error while deleting task"
+        })
+    }
+})
+
+router.patch('/single/:id', checkJwt, checkOwnership, async (req, res) => {
+    try {
+        const task = req.task
+        const {name, status} = req.body
+        const updatedTask = await Task.update({
+            name: name,
+            status: status
+        }, {
+            where: {
+                id: task.id
+            }
+        })
+        return res.sendStatus(200)
+    } catch (error) {
+        return res.status(400).json({
+            message: "Error while updating task"
+        })
+    }
+})
+
+router.patch('/single/:id/:mode', checkJwt, checkOwnership, async (req, res) => {
+    try {
+        const task = req.task;
+        const mode = Number(req.params.mode)
+        let status = ''
+        if(mode === 1){
+            status = 'Waiting'
+        }else if(mode === 2){
+            status = 'Started'
+        }else if(mode === 3){
+            status = 'Finished'
+        }
+        const updatedTask = await Task.update({
+            status:status
+        }, {
+            where: {
+                id:task.id
+            }
+        })
+        return res.sendStatus(200)
+
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({
+            message: "Error while changing the mode of the task"
+        })
+    }
+})
+
 module.exports = router
