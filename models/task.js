@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   Task.init({
     name: {
       type: DataTypes.STRING,
+      allowNull:false
     },
     userId: {
       type:DataTypes.INTEGER,
@@ -24,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
-      allowNull:false,
+      allowNull:true,
       defaultValue:'Waiting'
     }
   }, {
