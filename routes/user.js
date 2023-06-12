@@ -4,6 +4,8 @@ const User = require('../models').User
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 
+const taskRouter = require('./task')
+
 router.get('/', async (req, res) => {
     try {
         
@@ -13,3 +15,7 @@ router.get('/', async (req, res) => {
         })
     }
 })
+
+router.use('/task', taskRouter)
+
+module.exports = router
