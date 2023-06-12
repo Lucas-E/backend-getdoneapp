@@ -15,6 +15,7 @@ const checkOwnership = async (req, res, next) => {
             })
         }
         if(foundTask.userId === req.user.id){
+            req.task = foundTask
             next()
         }else{
             return res.status(401).json({
