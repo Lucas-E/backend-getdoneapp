@@ -5,6 +5,8 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const checkUserAuthenticationMiddleware = require('../middleware/checkJwt')
+
 router.post("/login", async (req, res) => {
 	try {
 		const { email, password } = req.body;
@@ -22,14 +24,14 @@ router.post("/login", async (req, res) => {
 		const comparation = await bcrypt.compare(password, userPassword);
 		if (comparation) {
 			const refreshToken = await jwt.sign(
-				{ id: user.id, email: user.email },
+				{ user: {id: user.id, email: user.email} },
 				process.env.REFRESH_SECRET,
 				{
 					expiresIn: "1m",
 				}
 			);
 			const accessToken = await jwt.sign(
-				{ id: user.id, email: user.email },
+				{ user: {id: user.id, email: user.email} },
 				process.env.ACCESS_SECRET,
 				{
 					expiresIn: "30s",
@@ -63,9 +65,10 @@ router.post("/login", async (req, res) => {
 	}
 });
 
-router.post('/logout', async (req, res) => {
+router.post('/logout', checkUserAuthenticationMiddleware,async (req, res) => {
     try {
-        const {email} = req.body
+        const {email} = req.user
+        console.log(email)
         const updatedUser = await User.update({
             token: ''
         }, {
@@ -76,6 +79,7 @@ router.post('/logout', async (req, res) => {
             accessToken: ''
         })
     } catch (error) {
+        console.log(error)
         return res.status(400).json({
             message: 'Error while logging out'
         })
