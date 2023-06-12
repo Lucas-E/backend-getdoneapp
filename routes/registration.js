@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
 router.patch("/password", async (req, res) => {
 	try {
 		const { password, email } = req.body;
-		const salt = await bcrypt.salt(process.env.SALT);
+		const salt = await bcrypt.salt(Number(process.env.SALT));
 		const hashedPassword = await bcrypt.hash(password, salt);
 		const updatedUser = await User.update(
 			{ password: hashedPassword },
