@@ -8,7 +8,7 @@ require("dotenv").config();
 router.post("/", async (req, res) => {
 	try {
 		const { username, name, password, email } = req.body;
-		const salt = await bcrypt.salt(process.env.SALT);
+		const salt = await bcrypt.genSalt(process.env.SALT);
 		const hashedPassword = await bcrypt.hash(password, salt);
 		const createdUser = await User.create({
 			username: username,
@@ -18,7 +18,8 @@ router.post("/", async (req, res) => {
 		});
 		return res.sendStatus(200);
 	} catch (error) {
-		return res.status(400).json({ message: "Error while singing up user" });
+        console.log(error)
+		return res.status(400).json({ message: "Error while singing up user", error: error });
 	}
 });
 
