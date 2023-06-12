@@ -7,6 +7,7 @@ const Sequelize = require("./models");
 //setting up router
 const registrationRouter = require('./routes/registration')
 const authRouter = require('./routes/authentication')
+const userRouter = require('./routes/user')
 
 
 var app = express();
@@ -20,5 +21,6 @@ app.use(express.static(path.join(__dirname, "public")));
 //setting up routes
 app.use('/registration', registrationRouter)
 app.use('/auth', authRouter)
+app.use('/user', userRouter)
 
 module.exports = app;
