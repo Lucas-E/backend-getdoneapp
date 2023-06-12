@@ -4,8 +4,9 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const Sequelize = require("./models");
 
-//setting up registration router
+//setting up router
 const registrationRouter = require('./routes/registration')
+const authRouter = require('./routes/authentication')
 
 
 var app = express();
@@ -18,5 +19,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //setting up routes
 app.use('/registration', registrationRouter)
+app.use('/auth', authRouter)
 
 module.exports = app;
