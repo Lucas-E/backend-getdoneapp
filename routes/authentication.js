@@ -13,19 +13,24 @@ router.post("/login", async (req, res) => {
 				email: email,
 			},
 		});
+        if(!user){
+            return res.status(400).json({
+                message: "No user found"
+            })
+        }
 		const userPassword = user.password;
 		const comparation = await bcrypt.compare(password, userPassword);
 		if (comparation) {
-			const refreshToken = jwt.sign(
+			const refreshToken = await jwt.sign(
 				{ id: user.id, email: user.email },
 				process.env.REFRESH_SECRET,
 				{
 					expiresIn: "1m",
 				}
 			);
-			const accessToken = jwt.sign(
+			const accessToken = await jwt.sign(
 				{ id: user.id, email: user.email },
-				process.env.ACESS_TOKEN,
+				process.env.ACCESS_SECRET,
 				{
 					expiresIn: "30s",
 				}
