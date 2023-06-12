@@ -27,14 +27,14 @@ router.post("/login", async (req, res) => {
 				{ user: {id: user.id, email: user.email} },
 				process.env.REFRESH_SECRET,
 				{
-					expiresIn: "1m",
+					expiresIn: "1d",
 				}
 			);
 			const accessToken = await jwt.sign(
 				{ user: {id: user.id, email: user.email} },
 				process.env.ACCESS_SECRET,
 				{
-					expiresIn: "30s",
+					expiresIn: "5h",
 				}
 			);
 			const updatedUser = await User.update(
@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
 				}
 			);
             res.cookie('refreshToken', refreshToken, {
-                maxAge: 60,
+                maxAge: 60*60*24,
                 httpOnly: true
             })
             return res.status(200).json(accessToken)
