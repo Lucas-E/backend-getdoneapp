@@ -70,7 +70,7 @@ router.post('/logout', checkUserAuthenticationMiddleware,async (req, res) => {
         const {email} = req.user
         console.log(email)
         const updatedUser = await User.update({
-            token: ''
+            token: null
         }, {
             where: {email:email}
         })
