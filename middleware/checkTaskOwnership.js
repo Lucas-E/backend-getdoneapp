@@ -10,7 +10,7 @@ const checkOwnership = async (req, res, next) => {
             }
         })
         if(!foundTask){
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "Task not found"
             })
         }
