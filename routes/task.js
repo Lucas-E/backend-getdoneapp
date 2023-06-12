@@ -24,7 +24,8 @@ router.post('/', checkJwt, async (req, res) => {
 
 router.get('/:id', checkJwt, checkOwnership,async (req, res) => {
     try {
-        
+        const task = req.task
+        return res.status(200).json(task)
     } catch (error) {
         return res.status(400).json({
             message: "Error while trying to get task"
