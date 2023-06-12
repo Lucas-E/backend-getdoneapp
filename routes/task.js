@@ -22,13 +22,30 @@ router.post('/', checkJwt, async (req, res) => {
     }
 })
 
-router.get('/:id', checkJwt, checkOwnership,async (req, res) => {
+router.get('/single/:id', checkJwt, checkOwnership,async (req, res) => {
     try {
         const task = req.task
         return res.status(200).json(task)
     } catch (error) {
         return res.status(400).json({
             message: "Error while trying to get task"
+        })
+    }
+})
+
+router.get('/allTasks', checkJwt, async (req, res) => {
+    try {
+        const userId = Number(req.user.id);
+        console.log(userId)
+        const foundTasks = await Task.findAll({
+            where: {
+                userId: userId
+            }
+        });
+        return res.status(200).json(foundTasks)
+    } catch (error) {
+        return res.status(400).json({
+            message: "Error while fetching all tasks"
         })
     }
 })
