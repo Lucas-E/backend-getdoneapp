@@ -27,3 +27,5 @@ const checkOwnership = async (req, res, next) => {
         })
     }
 }
+
+module.exports = checkOwnership
